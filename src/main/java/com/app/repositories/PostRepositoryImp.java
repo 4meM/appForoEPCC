@@ -1,9 +1,11 @@
-package com.proyect_v1.mvp.repositories;
+package com.app.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import com.proyect_v1.mvp.domain.entities.Post;
+import com.app.domain.post.Post;
 
+@Repository
 public interface PostRepositoryImp extends JpaRepository<Post,Long>{
 
 }

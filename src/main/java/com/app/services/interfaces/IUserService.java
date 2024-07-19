@@ -1,12 +1,21 @@
 package com.app.services.interfaces;
 
-import com.app.domain.entities.Person;
-import com.app.domain.entities.User;
+import com.app.domain.user.Person;
 
-public interface IUserService {
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-  public User registerUser(Person person);
+import com.app.controller.dto.LoginRequestDTO;
+import com.app.domain.user.ForoUser;
 
-  public User getUserbyId(Long id);
+public interface IUserService extends UserDetailsService {
+
+  public ForoUser registerUser(Person person);
+
+  public ForoUser getUserbyId(Long id);
+
+  public String loginUser(LoginRequestDTO loginRequest);
+
+  public Authentication authenticate (String username, String password);
 
 }

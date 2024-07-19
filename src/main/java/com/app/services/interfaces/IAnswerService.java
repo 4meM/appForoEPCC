@@ -1,6 +1,6 @@
-package com.proyect_v1.mvp.services.interfaces;
+package com.app.services.interfaces;
 
-import com.proyect_v1.mvp.domain.entities.Answer;
+import com.app.domain.post.Answer;
 
 public interface IAnswerService {
 

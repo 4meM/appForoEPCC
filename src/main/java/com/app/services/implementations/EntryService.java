@@ -1,4 +1,4 @@
-package com.proyect_v1.mvp.services.implementations;
+package com.app.services.implementations;
 
 import java.util.Optional;
 
@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.proyect_v1.mvp.domain.entities.Entry;
-import com.proyect_v1.mvp.domain.entities.User;
-import com.proyect_v1.mvp.repositories.EntryRepositoryImp;
-import com.proyect_v1.mvp.services.interfaces.IEntryService;
+import com.app.domain.post.Entry;
+import com.app.domain.user.ForoUser;
+import com.app.repositories.EntryRepositoryImp;
+import com.app.services.interfaces.IEntryService;
 
 @Service
 public class EntryService implements IEntryService{
@@ -21,7 +21,7 @@ public class EntryService implements IEntryService{
 
   @Override
   @Transactional
-  public Entry createEntry(User user,String content){
+  public Entry createEntry(ForoUser user,String content){
     try{
       Entry entryCreated = new Entry();
       entryCreated.setUser(user);

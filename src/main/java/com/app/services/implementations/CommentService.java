@@ -3,17 +3,17 @@ package com.app.services.implementations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.app.domain.entities.Answer;
-import com.app.domain.entities.Comment;
-import com.app.domain.entities.Entry;
-import com.app.domain.entities.Post;
-import com.app.domain.entities.User;
-import com.app.repositories.CommentRepository;
+import com.app.domain.post.Answer;
+import com.app.domain.post.Comment;
+import com.app.domain.post.Entry;
+import com.app.domain.post.Post;
+import com.app.domain.user.ForoUser;
 import com.app.repositories.CommentRepositoryImp;
 import com.app.services.interfaces.ICommentService;
 
 
 
+@Service
 public class CommentService implements ICommentService{
     
   @Autowired
@@ -34,7 +34,8 @@ public class CommentService implements ICommentService{
       try {
           Post post = postService.getPostById(postId);
           Entry entry = post.getEntry();
-          User user = userService.getUserById(userId);
+          ForoUser user = userService.getUserbyId(userId);
+
 
           Comment comment = new Comment();
           comment.setUser(user);
@@ -52,7 +53,8 @@ public class CommentService implements ICommentService{
       try {
           Answer answer = answerService.getAnswerById(answerId);
           Entry entry = answer.getEntry();
-          User user = userService.getUserById(userId);
+          ForoUser user = userService.getUserbyId(userId);
+
 
           Comment comment = new Comment();
           comment.setEntry(entry);

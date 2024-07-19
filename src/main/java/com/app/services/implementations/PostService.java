@@ -1,14 +1,14 @@
-package com.proyect_v1.mvp.services.implementations;
+package com.app.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.proyect_v1.mvp.domain.entities.Entry;
-import com.proyect_v1.mvp.domain.entities.Post;
-import com.proyect_v1.mvp.domain.entities.User;
-import com.proyect_v1.mvp.repositories.PostRepositoryImp;
-import com.proyect_v1.mvp.services.interfaces.IPostService;
+import com.app.domain.post.Entry;
+import com.app.domain.post.Post;
+import com.app.domain.user.ForoUser;
+import com.app.repositories.PostRepositoryImp;
+import com.app.services.interfaces.IPostService;
 
 
 
@@ -28,7 +28,7 @@ public class PostService implements IPostService{
   @Transactional
   public Post createPost(Long id_user,String title,String content){
     try {
-      User user = userService.getUserbyId(id_user);
+      ForoUser user = userService.getUserbyId(id_user);
 
       Entry entrySaved = entryService.createEntry(user, content);
 

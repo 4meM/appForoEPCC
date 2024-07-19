@@ -1,6 +1,6 @@
-package com.proyect_v1.mvp.services.interfaces;
+package com.app.services.interfaces;
 
-import com.proyect_v1.mvp.domain.entities.Post;
+import com.app.domain.post.Post;
 
 public interface IPostService {
   public Post createPost (Long id_user,String title,String content);

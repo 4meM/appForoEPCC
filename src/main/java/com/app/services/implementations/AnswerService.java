@@ -1,15 +1,15 @@
-package com.proyect_v1.mvp.services.implementations;
+package com.app.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.proyect_v1.mvp.domain.entities.Answer;
-import com.proyect_v1.mvp.domain.entities.Entry;
-import com.proyect_v1.mvp.domain.entities.Post;
-import com.proyect_v1.mvp.domain.entities.User;
-import com.proyect_v1.mvp.repositories.AnswerRepositoryImp;
-import com.proyect_v1.mvp.services.interfaces.IAnswerService;
+import com.app.domain.post.Answer;
+import com.app.domain.post.Entry;
+import com.app.domain.post.Post;
+import com.app.domain.user.ForoUser;
+import com.app.repositories.AnswerRepositoryImp;
+import com.app.services.interfaces.IAnswerService;
 
 @Service
 public class AnswerService implements IAnswerService{
@@ -29,7 +29,7 @@ public class AnswerService implements IAnswerService{
   @Transactional
   public Answer createAnswer(Long post_id_to_reply,Long id_user,String content){
     try{
-      User user = userService.getUserbyId(id_user);
+      ForoUser user = userService.getUserbyId(id_user);
       Entry entryCreated = entryService.createEntry(user, content);
       Post postToReply = postService.getPostById(post_id_to_reply);
   
