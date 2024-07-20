@@ -17,7 +17,7 @@ import com.app.services.interfaces.ICommentService;
 public class CommentService implements ICommentService{
     
   @Autowired
-  private UserServiceImp userService;
+  private UserService userService;
 
   @Autowired
   private PostService postService;

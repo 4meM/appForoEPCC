@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.controller.dto.LoginRequestDTO;
+import com.app.controller.dto.SignupFieldsDTO;
+import com.app.domain.user.ForoUser;
 import com.app.services.interfaces.IUserService;
 
 @RestController
@@ -22,6 +24,11 @@ public class AuthController {
   @GetMapping("/hello")
   public String test () {
     return "Endpoint /auth run!";
+  }
+
+  @PostMapping("/signup")
+  public ForoUser signupUser (@RequestBody SignupFieldsDTO signupFields) {
+    return userService.registerUser(signupFields);
   }
 
 

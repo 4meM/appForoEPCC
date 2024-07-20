@@ -22,7 +22,7 @@ public class PostService implements IPostService{
   private PostRepositoryImp postRepository;
 
   @Autowired
-  private UserServiceImp userService;
+  private UserService userService;
 
   @Override
   @Transactional

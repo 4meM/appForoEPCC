@@ -1,6 +1,7 @@
 package com.app.services.implementations;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,19 +17,22 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.User;
 
 import com.app.domain.user.Person;
+import com.app.domain.user.Role;
 import com.app.controller.dto.LoginRequestDTO;
+import com.app.controller.dto.SignupFieldsDTO;
 import com.app.domain.user.ForoUser;
-import com.app.repositories.PersonRepositoryImp;
 import com.app.repositories.UserRepositoryImp;
 import com.app.resources.JwtUtil;
+import com.app.services.interfaces.IPersonService;
 import com.app.services.interfaces.IUserService;
 
 
 @Service
-public class UserServiceImp implements IUserService{
+public class UserService implements IUserService{
 
   @Autowired
-  private PersonRepositoryImp personRepository;
+  private IPersonService personService;
+
   @Autowired
   private UserRepositoryImp userRepository;
 
@@ -40,14 +44,21 @@ public class UserServiceImp implements IUserService{
 
   @Override
   @Transactional
-  public ForoUser registerUser(Person person){
+  public ForoUser registerUser(SignupFieldsDTO fields){
     try {
-      Person personCreated = personRepository.save(person);
-      ForoUser userCreated = new ForoUser();
-      userCreated.setPerson(personCreated);
+      Person personCreated = personService.createPerson(fields.firstName(),fields.lastName(), fields.email(), fields.birthDay());
+      Role userRole = Role.builder().name("USER").build();
+      Role adminRole = Role.builder().name("ADMIN").build();
+
+      ForoUser userCreated = ForoUser.builder()
+                                     .username(fields.username())
+                                     .password(fields.password())
+                                     .person(personCreated) 
+                                     .roles(Set.of(userRole,adminRole))
+                                     .build();
       return userRepository.save(userCreated);
     } catch(Exception e){
-      throw new RuntimeException("Error al crear usuario",e);
+      throw new RuntimeException("Error al crear usuario");
     }
   };
 

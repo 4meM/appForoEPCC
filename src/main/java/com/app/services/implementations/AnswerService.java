@@ -14,7 +14,7 @@ import com.app.services.interfaces.IAnswerService;
 @Service
 public class AnswerService implements IAnswerService{
   @Autowired
-  private UserServiceImp userService;
+  private UserService userService;
 
   @Autowired
   private PostService postService;

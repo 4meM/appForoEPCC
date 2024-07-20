@@ -3,9 +3,14 @@ package com.app.resources;
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -41,6 +46,34 @@ public class JwtUtil {
                       .withNotBefore(new Date(System.currentTimeMillis()))
                       .sign(algorithm);
     return token;
+  };
+
+  public DecodedJWT validateJWT (String token) {
+    try {
+      Algorithm algorithm = Algorithm.HMAC256(this.privateKey);
+
+      JWTVerifier verifier = JWT.require(algorithm)
+                                .withIssuer(this.userGenerator)
+                                .build();
+      DecodedJWT decodedJWT = verifier.verify(token);
+      return decodedJWT;
+    } catch (JWTVerificationException exception) {
+      throw new JWTVerificationException("Invalid Token, No authorized!");
+    }
+  };
+
+  public String extractUsername (DecodedJWT decodedJWT) {
+    return decodedJWT.getSubject().toString();
   }
+
+    public Claim getSpecificClaim (DecodedJWT decodedJWT,String claimName) {
+    return decodedJWT.getClaim(claimName);
+  };
+
+  public Map<String, Claim> returnAllClaims (DecodedJWT decodedJWT) {
+    return decodedJWT.getClaims();
+  };
+
+
 
 }
