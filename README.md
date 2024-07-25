@@ -24,6 +24,128 @@ uso de nombres claros y descriptivos para la clase y variables, lo que facilita 
 
 un mejor manejo en las excepciones
 
+## Buenas Prácticas en `ForoUser`
+
+1. **Uso de Lombok para Reducir Código Boilerplate:**
+   - El uso de `@Getter`, `@Setter`, `@Builder`, `@AllArgsConstructor`, y `@NoArgsConstructor` ayuda a reducir el código repetitivo, haciendo la clase más limpia y fácil de mantener.
+
+2. **Definición Clara de Relaciones en la Base de Datos:**
+   - Las anotaciones JPA como `@OneToOne`, `@ManyToMany`, `@JoinColumn`, y `@JoinTable` proporcionan una definición precisa y clara de las relaciones entre entidades, facilitando la comprensión de la estructura de la base de datos.
+
+3. **Columnas Claras y Específicas:**
+   - Las anotaciones `@Column` con atributos como `unique`, `nullable`, y `name` aseguran una especificación detallada del comportamiento esperado de las columnas en la base de datos.
+
+**Ejemplo de Código:**
+
+```java
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "users")
+public class ForoUser {
+
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long id; 
+
+   @Column(unique = true, nullable = false)
+   private String username;
+
+   @Column(nullable = false)
+   private String password;
+
+   @OneToOne
+   @JoinColumn(name = "id_person", referencedColumnName = "id", 
+   foreignKey = @ForeignKey(name = "FK_person_user"), nullable = false)
+   private Person person;
+
+   @Column(name = "is_enabled")
+   private boolean isEnabled;
+
+   @Column(name = "account_no_expired")
+   private boolean accountNoExpired;
+
+   @Column(name = "account_no_locked")
+   private boolean accountNoLocked;
+
+   @Column(name = "credential_no_expired")
+   private boolean credentialNoExpired;
+
+   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+   @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+   @Builder.Default
+   private Set<Role> roles = new HashSet<>();
+}
+```
+
+## Buenas Prácticas en `UserService.java`
+
+### Buenas Prácticas de Clean Code
+
+1. **Inyección de Dependencias a través del Constructor:**
+   - **Descripción:** La inyección de dependencias a través del constructor facilita la prueba unitaria de la clase y asegura que todas las dependencias necesarias estén presentes al momento de la creación del objeto.
+     ```java
+     @Autowired
+     public UserService(IPersonService personService, UserRepositoryImp userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+       this.userRepository = userRepository;
+       this.personService = personService;
+       this.passwordEncoder = passwordEncoder;
+       this.jwtUtil = jwtUtil;
+     }
+     ```
+
+2. **Nombres Claros y Descriptivos:**
+   - **Descripción:** Los nombres de los métodos y variables son claros y descriptivos, lo que mejora la legibilidad del código y facilita su comprensión.
+     ```java
+     public ForoUser registerUser(SignupFieldsDTO fields)
+     public ForoUser getUserbyId(Long id)
+     public String loginUser(LoginRequestDTO loginRequest)
+     ```
+
+3. **Uso de DTOs para la Transferencia de Datos:**
+   - **Descripción:** Utilizar objetos de transferencia de datos (DTOs) para encapsular datos de entrada y salida ayuda a mantener el código modular y enfocado.
+     ```java
+     public ForoUser registerUser(SignupFieldsDTO fields)
+     ```
+
+4. **Métodos Pequeños y Enfocados:**
+   - **Descripción:** Los métodos son pequeños y están enfocados en realizar una única tarea. Esto mejora la legibilidad y facilita la comprensión del propósito de cada método.
+     ```java
+     public Authentication authenticate(String username, String password)
+     public String loginUser(LoginRequestDTO loginRequest)
+     ```
+
+5. **Manejo Claro de Excepciones:**
+   - **Descripción:** El manejo de excepciones, proporcionando mensajes útiles para la depuración y el diagnóstico.
+     ```java
+     throw new RuntimeException("Error al crear usuario");
+     ```
+
+6. **Uso de `@Transactional` para Manejo de Transacciones:**
+   - **Descripción:** La anotación `@Transactional` asegura que las operaciones que modifican datos se realicen dentro de una transacción, ayudando a mantener la integridad de los datos.
+   - **Ejemplo:**
+     ```java
+     @Override
+     @Transactional
+     public ForoUser registerUser(SignupFieldsDTO fields)
+     ```
+
+7. **Uso del Patrón `Builder` para la Creación de Objetos:**
+   - **Descripción:** El patrón `Builder` facilita la creación de objetos complejos de manera clara y legible, evitando constructores con múltiples parámetros.
+   - **Ejemplo:**
+     ```java
+     ForoUser userCreated = ForoUser.builder()
+         .username(fields.username())
+         .password(passwordEncoder.encode(fields.password()))
+         .person(personCreated)
+         .roles(Set.of(userRole, adminRole))
+         .build();
+     ```
+
+
 ## -----------------------------------------------------------------------------------------------------------
 
 ## principios SOLID
