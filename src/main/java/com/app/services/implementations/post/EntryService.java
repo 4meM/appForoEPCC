@@ -1,5 +1,6 @@
 package com.app.services.implementations.post;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,37 +13,42 @@ import com.app.repositories.post.EntryRepositoryImp;
 import com.app.services.interfaces.post.IEntryService;
 
 @Service
-public class EntryService implements IEntryService{
+public class EntryService implements IEntryService {
 
-  // @Autowired
-  // private UserServiceImp userService;
-  @Autowired
-  private EntryRepositoryImp entryRepository;
+    private final EntryRepositoryImp entryRepository;
 
-  @Override
-  @Transactional
-  public Entry createEntry(ForoUser user,String content){
-    try{
-      Entry entryCreated = new Entry();
-      entryCreated.setUser(user);
-      entryCreated.setContent(content);
-
-      return entryRepository.save(entryCreated);
-    }catch(Exception e){
-      throw new RuntimeException("No se pudo crear el entry");
+    @Autowired
+    public EntryService(EntryRepositoryImp entryRepository) {
+        this.entryRepository = entryRepository;
     }
-  };
 
-  @Override
-  @Transactional
-  public void addCommentToEntry(Long id_entry){
-    if(!entryRepository.existsById(id_entry)){
-      throw new RuntimeException("Nos e puede añadir el contador de comentarios");
+    @Override
+    @Transactional
+    public Entry createEntry(ForoUser user, String content) {
+        try {
+            Entry entryCreated = new Entry();
+            entryCreated.setUser(user);
+            entryCreated.setContent(content);
+
+            return entryRepository.save(entryCreated);
+        } catch (Exception e) {
+            throw new IllegalStateException("No se pudo crear el entry", e);
+        }
     }
-    Optional<Entry> entryO = entryRepository.findById(id_entry);
-    Entry entry = entryO.get();
-    entry.setComments(entry.getComments()+1);
-    entryRepository.save(entry);
-  };
 
+    @Override
+    @Transactional
+    public void addCommentToEntry(Long idEntry) {
+        if (!entryRepository.existsById(idEntry)) {
+            throw new NoSuchElementException("No se puede añadir el contador de comentarios");
+        }
+        Optional<Entry> entryO = entryRepository.findById(idEntry);
+        if (entryO.isPresent()) {
+            Entry entry = entryO.get();
+            entry.setComments(entry.getComments() + 1);
+            entryRepository.save(entry);
+        } else {
+            throw new NoSuchElementException("Entry no encontrado");
+        }
+    }
 }
