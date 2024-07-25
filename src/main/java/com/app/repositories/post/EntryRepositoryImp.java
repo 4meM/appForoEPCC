@@ -9,3 +9,4 @@ import com.app.domain.post.Entry;
 public interface EntryRepositoryImp extends JpaRepository<Entry,Long>{
 
 }
+

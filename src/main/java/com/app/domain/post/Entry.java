@@ -29,19 +29,19 @@ public class Entry {
   private String content;
 
   @Column(columnDefinition = "INT DEFAULT 0")
-  private int up_votes;
+  private int upVotes;
 
   @Column(columnDefinition = "INT DEFAULT 0")
-  private int down_votes;
+  private int downVotes;
 
   @Column(columnDefinition = "INT DEFAULT 0")
   private int comments;
 
   @Column(nullable = false,updatable = false,columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  private LocalDateTime created_at;
+  private LocalDateTime createdAt;
 
   @Column(nullable = false,columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  private LocalDateTime last_update;
+  private LocalDateTime lastUpdate;
 
   public Long getId() {
     return id;
@@ -55,44 +55,44 @@ public class Entry {
     return content;
   }
 
-  public int getUp_votes() {
-    return up_votes;
+  public int getUpVotes() {
+    return upVotes;
   }
 
-  public int getDown_votes() {
-    return down_votes;
+  public int getDownVotes() {
+    return downVotes;
   }
 
   public int getComments() {
     return comments;
   }
 
-  public LocalDateTime getCreated_at() {
-    return created_at;
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
   }
 
-  public LocalDateTime getLast_update() {
-    return last_update;
+  public LocalDateTime getLastUpdate() {
+    return lastUpdate;
   }
 
   public void setContent(String content) {
     this.content = content;
   }
 
-  public void setUp_votes(int up_votes) {
-    this.up_votes = up_votes;
+  public void setUpVotes(int upVotes) {
+    this.upVotes = upVotes;
   }
 
-  public void setDown_votes(int down_votes) {
-    this.down_votes = down_votes;
+  public void setDownVotes(int downVotes) {
+    this.downVotes = downVotes;
   }
 
   public void setComments(int comments) {
     this.comments = comments;
   }
 
-  public void setLast_update(LocalDateTime last_update) {
-    this.last_update = last_update;
+  public void setLastUpdate(LocalDateTime lastUpdate) {
+    this.lastUpdate = lastUpdate;
   }
 
   public void setUser(ForoUser user) {
