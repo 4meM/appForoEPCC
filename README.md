@@ -37,10 +37,65 @@ implicando que PostService no crea instancias directamente, sino que depende de 
 
 el uso de la inyección de dependencias y el hecho de que PostService pueda utilizar cualquier implementación de `EntryService`, `PostRepositoryImp` y `UserService`. permitiendo que PostService funcione correctamente independientemente de las implementaciones concretas.
 
+El principio de sustitución de Liskov se cumple porque cualquier instancia de una subclase de `Role` puede ser utilizada en lugar de una instancia de `Role` sin alterar el comportamiento esperado del sistema.
+
+```java
+public void printRoleName(Role role) {
+  System.out.println(role.getName());
+}
+
+public void exampleUsage() {
+  Role adminRole = new AdminRole();
+  printRoleName(adminRole); // AdminRole puede ser usado aquí
+}
+```
+
 3. **Principio de Responsabilidad Única**
 
 `Post` está principalmente enfocado en la gestión de posts, específicamente en su creación y recuperación. Aunque se delegan tareas como la creación de una entrada y la obtención de un usuario, estas operaciones son parte integral de la creación de un post.
 
+La clase `Person` solo se encarga de representar los datos de una persona. No tiene ninguna lógica adicional, ni responsabilidades más allá de almacenar la información de una persona.
+
+```java
+public class Person {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column(nullable = false)
+  private String firstName;
+
+  @Column(nullable = false)
+  private String lastName;
+
+  @Column(nullable = false)
+  private String email;
+
+  @Column(nullable = false)
+  private LocalDate dateOfBirthDay;
+
+}
+```
+
+
 4. **Principio de Encapsulamiento**
 
 Los atributos de la clase `Post` son privados y se accede a ellos a través de métodos públicos (getters y setters). Esto asegura que los datos estén encapsulados y solo se puedan modificar de forma controlada, lo que protege la integridad del objeto.
+
+## 5. Interface Segregation Principle (ISP)
+
+`IUserService` cumple con el principio de segregación de interfaces ya que define solo los métodos necesarios para el servicio de usuario. No obliga a implementar métodos innecesarios para las clases que lo implementan.
+
+```java
+public interface IUserService extends UserDetailsService {
+  ForoUser registerUser(SignupFieldsDTO signupFields);
+  ForoUser getUserbyId(Long id);
+  String loginUser(LoginRequestDTO loginRequest);
+  Authentication authenticate(String username, String password);
+}
+```
+
+
+
+
