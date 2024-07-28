@@ -1,5 +1,9 @@
 package com.app.domain.post;
 
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +27,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "post")
+@Indexed
 public class Post {
 
   @Id
@@ -33,6 +38,9 @@ public class Post {
   @JoinColumn(name = "id_entry",referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_entry_post"),nullable = false)
   private Entry entry;
 
+  
+  @FullTextField(analyzer = "name")
+  @KeywordField(name = "title_exact", normalizer = "exact")
   @Column(nullable = false)
   private String title;
 
