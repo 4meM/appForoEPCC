@@ -1,7 +1,7 @@
 package com.app.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,16 +10,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.controller.dto.LoginRequestDTO;
 import com.app.controller.dto.SignupFieldsDTO;
+import com.app.controller.dto.response.TokenResponse;
 import com.app.domain.user.ForoUser;
 import com.app.services.interfaces.IUserService;
 
 @RestController
+@CrossOrigin("http://localhost:3000/")
 @PreAuthorize("permitAll")
 @RequestMapping("/auth")
 public class AuthController {
 
-  @Autowired
   private IUserService userService;
+
+  // @Autowired
+  public AuthController(IUserService userService){
+    this.userService=userService;
+  }
 
   @GetMapping("/hello")
   public String test () {
@@ -31,9 +37,9 @@ public class AuthController {
     return userService.registerUser(signupFields);
   }
 
-
-  @PostMapping("/login")
-  public String loginUser (@RequestBody LoginRequestDTO loginRequest) {
+  @PostMapping("/signin")
+  public TokenResponse loginUser (@RequestBody LoginRequestDTO loginRequest) {
+    System.out.println(loginRequest.username());
     return userService.loginUser(loginRequest);
   }
 

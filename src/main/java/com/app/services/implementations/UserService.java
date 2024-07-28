@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,8 +17,10 @@ import org.springframework.security.core.userdetails.User;
 
 import com.app.domain.user.Person;
 import com.app.domain.user.Role;
+import com.app.exceptions.CreationException;
 import com.app.controller.dto.LoginRequestDTO;
 import com.app.controller.dto.SignupFieldsDTO;
+import com.app.controller.dto.response.TokenResponse;
 import com.app.domain.user.ForoUser;
 import com.app.repositories.UserRepositoryImp;
 import com.app.resources.JwtUtil;
@@ -30,17 +31,17 @@ import com.app.services.interfaces.IUserService;
 @Service
 public class UserService implements IUserService{
 
-  @Autowired
   private IPersonService personService;
-
-  @Autowired
   private UserRepositoryImp userRepository;
-
-  @Autowired
-  PasswordEncoder passwordEncoder;
-
-  @Autowired
+  private PasswordEncoder passwordEncoder;
   private JwtUtil jwtUtil;
+
+  public UserService (IPersonService personService, UserRepositoryImp userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    this.personService=personService;
+    this.userRepository=userRepository;
+    this.passwordEncoder=passwordEncoder;
+    this.jwtUtil=jwtUtil;
+  }
 
   @Override
   @Transactional
@@ -58,9 +59,9 @@ public class UserService implements IUserService{
                                      .build();
       return userRepository.save(userCreated);
     } catch(Exception e){
-      throw new RuntimeException("Error al crear usuario");
+      throw new CreationException("Error al registrar el nuevo usuario");
     }
-  };
+  }
 
   @Override
   @Transactional(readOnly = true)
@@ -69,9 +70,17 @@ public class UserService implements IUserService{
       .orElseThrow();
   }
 
+  
+  @Override
+  @Transactional(readOnly = true)
+  public ForoUser getUserByUsername (String userName) {
+     return userRepository.findForoUserByUsername(userName)
+          .orElseThrow(()-> new UsernameNotFoundException("No se encontro el usuario"));
+  }
+
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    ForoUser userFound = userRepository.findUserByUsername(username)
+    ForoUser userFound = userRepository.findForoUserByUsername(username)
           .orElseThrow(()-> new UsernameNotFoundException("El usuario "+username+" no fue encontrado"));
 
     List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
@@ -86,7 +95,7 @@ public class UserService implements IUserService{
                     userFound.isAccountNoLocked(),
                     authorityList);
     
-  };
+  }
 
   public Authentication authenticate (String username, String password) {
     UserDetails userFound = this.loadUserByUsername(username);
@@ -103,15 +112,14 @@ public class UserService implements IUserService{
 
   }
 
-  public String loginUser(LoginRequestDTO loginRequest) {
+  public TokenResponse loginUser(LoginRequestDTO loginRequest) {
     String username = loginRequest.username();
     String password = loginRequest.password();
 
     Authentication auth = this.authenticate(username, password);
     SecurityContextHolder.getContext().setAuthentication(auth);
 
-    String tokenUser = this.jwtUtil.generateToken(auth);
+    return TokenResponse.builder().token( this.jwtUtil.generateToken(auth)).build();
 
-    return tokenUser;
   }
 }

@@ -37,7 +37,7 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(new JwtTokenValidatorFilter(jwtUtil),BasicAuthenticationFilter.class)
         .build();
-  };
+  }
 
   @Bean
   public AuthenticationProvider authenticationProvider(UserService userServiceImp){

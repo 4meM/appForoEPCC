@@ -11,6 +11,7 @@ import com.app.domain.user.ForoUser;
 @Repository
 public interface UserRepositoryImp extends JpaRepository<ForoUser, Long>{
 
-  public Optional<ForoUser> findUserByUsername (String username);
+  public Optional<ForoUser> findForoUserByUsername (String username);
 
 }
+ 

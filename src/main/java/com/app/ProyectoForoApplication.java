@@ -68,6 +68,6 @@ public class ProyectoForoApplication {
 			//ptmr otra rama raaa
 		};
 
-	};
+	}
 
 }

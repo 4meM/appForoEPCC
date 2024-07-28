@@ -2,10 +2,10 @@ package com.app.resources;
 
 import org.springframework.stereotype.Component;
 
+import com.app.exceptions.UnauthorizedException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
@@ -36,7 +36,7 @@ public class JwtUtil {
                         .stream().map(GrantedAuthority::getAuthority)
                         .collect(Collectors.joining(","));
 
-    String token = JWT.create()
+    return JWT.create()
                       .withIssuer(this.userGenerator)
                       .withSubject(username)
                       .withClaim("authorities", authorities)
@@ -45,8 +45,7 @@ public class JwtUtil {
                       .withJWTId(UUID.randomUUID().toString())
                       .withNotBefore(new Date(System.currentTimeMillis()))
                       .sign(algorithm);
-    return token;
-  };
+  }
 
   public DecodedJWT validateJWT (String token) {
     try {
@@ -55,24 +54,23 @@ public class JwtUtil {
       JWTVerifier verifier = JWT.require(algorithm)
                                 .withIssuer(this.userGenerator)
                                 .build();
-      DecodedJWT decodedJWT = verifier.verify(token);
-      return decodedJWT;
-    } catch (JWTVerificationException exception) {
-      throw new JWTVerificationException("Invalid Token, No authorized!");
+      return  verifier.verify(token);
+    } catch (Exception ex ) {
+      throw new UnauthorizedException("El token no es valido");
     }
-  };
+  }
 
   public String extractUsername (DecodedJWT decodedJWT) {
-    return decodedJWT.getSubject().toString();
+    return decodedJWT.getSubject();
   }
 
     public Claim getSpecificClaim (DecodedJWT decodedJWT,String claimName) {
     return decodedJWT.getClaim(claimName);
-  };
+  }
 
   public Map<String, Claim> returnAllClaims (DecodedJWT decodedJWT) {
     return decodedJWT.getClaims();
-  };
+  }
 
 
 
