@@ -37,7 +37,7 @@ public class EntryService implements IEntryService{
   @Transactional
   public void addCommentToEntry(Long idEntry){
     if(!entryRepository.existsById(idEntry)){
-      throw new CreationException("No se pudo crear el comentario");
+      throw new CreationException("No se encontro el entry");
     }
     Optional<Entry> entryO = entryRepository.findById(idEntry);
     Entry entry = entryO.get();

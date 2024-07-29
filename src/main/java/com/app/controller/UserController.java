@@ -11,8 +11,8 @@ import com.app.domain.user.ForoUser;
 import com.app.services.interfaces.IUserService;
 
 
-@CrossOrigin("http://localhost:3000/")
 @RestController
+@CrossOrigin("http://localhost:3000/")
 @PreAuthorize("denyAll()")
 @RequestMapping("/user")
 public class UserController {
@@ -23,7 +23,7 @@ public class UserController {
     this.userService = userService;
   }
 
-  @GetMapping("/role")
+  @GetMapping("/role") 
   @PreAuthorize("hasRole('ADMIN')")
   public String onlyAdmins () {
     return "Hi you has role ADMIN";

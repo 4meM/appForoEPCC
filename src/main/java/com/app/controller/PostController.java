@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.controller.dto.CreatePostFieldsDTO;
 import com.app.domain.post.Post;
 import com.app.services.implementations.PostService;
+import com.app.services.interfaces.IPostService;
 
 
 @RestController
@@ -16,7 +17,7 @@ import com.app.services.implementations.PostService;
 @RequestMapping("/post")
 public class PostController {
 
-  private PostService postService;
+  private IPostService postService;
 
   public PostController (PostService postService) {
     this.postService = postService;

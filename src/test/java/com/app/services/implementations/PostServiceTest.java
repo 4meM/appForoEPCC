@@ -19,26 +19,26 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.app.domain.post.Answer;
 import com.app.domain.post.Entry;
 import com.app.domain.post.Post;
 import com.app.domain.user.ForoUser;
-import com.app.repositories.AnswerRepositoryImp;
+import com.app.repositories.PostRepositoryImp;
 
+import jakarta.persistence.EntityManager;
 @ExtendWith(MockitoExtension.class)
-class AnswerServiceTest {
-
-  @Mock
-  private UserService userService;
-  @Mock
-  private PostService postService;
+class PostServiceTest {
+  
   @Mock
   private EntryService entryService;
   @Mock
-  private AnswerRepositoryImp answerRepository;
+  private PostRepositoryImp postRepository;
+  @Mock
+  private UserService userService;
+  @Mock
+  private EntityManager entityManager;
 
   @InjectMocks
-  private AnswerService answerService;
+  private PostService postService;
 
   @Mock
   private Authentication authentication;
@@ -46,7 +46,7 @@ class AnswerServiceTest {
   @Mock
   private SecurityContext securityContext;
 
-  @BeforeEach
+   @BeforeEach
   public void setUp () {
     lenient().when(securityContext.getAuthentication()).thenReturn(authentication);
     SecurityContextHolder.setContext(securityContext);
@@ -54,60 +54,47 @@ class AnswerServiceTest {
 
   @Test
   @Transactional
-  void testCreateAnswer () {
-    //given que es lo que necesito tener para testear el metodo
-    String username = "testerUser";
-    Long postIdToReply = 1L;
-    String content = "Content de respuesta";
-
-    ForoUser user  = new ForoUser();
+  void testCreatePost () {
+    Long idUser = 1L;
+    String title = "titulo";
+    String content = "content";
+    String username = "tester";
+    ForoUser user = new ForoUser();
     user.setUsername(username);
-
+    user.setId(idUser);
     Entry entry = new Entry();
+    entry.setUser(user);
     entry.setContent(content);
 
     Post post = new Post();
-    post.setId(postIdToReply);
-
-    Answer answer = new Answer();
-    answer.setEntry(entry);
-    answer.setPost(post);
-
-    //when
+    post.setEntry(entry);
 
     lenient().when(authentication.getPrincipal()).thenReturn(username); 
     when(userService.getUserByUsername(username)).thenReturn(user);
     when(entryService.createEntry(user, content)).thenReturn(entry);
-    when(postService.getPostById(postIdToReply)).thenReturn(post);
-    when(answerRepository.save(any(Answer.class))).thenReturn(answer);//provamos que hac
+    when(postRepository.save(any(Post.class))).thenReturn(post);
 
-    //then
+    Post postCreated = postService.createPost(idUser, title, content);
 
-    //Act
-    Answer answerCreated = answerService.createAnswer(postIdToReply, content);
-
-    //Assert 
-
-    assertNotNull(answerCreated);
+    assertNotNull(postCreated);
+    assertEquals(idUser, postCreated.getEntry().getUser().getId());
   }
 
   @Test
   @Transactional
-  void testGetAnswerById () {
-    Long idAnswer = 1L;
+  void testGetPostById () {
+    Long idPost = 1L;
+    Post post = new Post();
+    post.setId(idPost);
 
-    Answer answer = new Answer();
-    answer.setId(idAnswer);
+    when(postRepository.findById(idPost)).thenReturn(Optional.of(post));
 
-    // when 
-    when(answerRepository.findById(idAnswer)).thenReturn(Optional.of(answer));
+    Post postFound = postService.getPostById(idPost);
 
-    // Act
-    Answer answerFound = answerService.getAnswerById(idAnswer);
+    assertNotNull(postFound);
+    assertEquals(idPost, postFound.getId());
 
-    //Assert
-    assertNotNull(answerFound);
-    assertEquals(idAnswer, answerFound.getId());
   }
+
 
 }

@@ -22,7 +22,6 @@ public class AuthController {
 
   private IUserService userService;
 
-  // @Autowired
   public AuthController(IUserService userService){
     this.userService=userService;
   }
