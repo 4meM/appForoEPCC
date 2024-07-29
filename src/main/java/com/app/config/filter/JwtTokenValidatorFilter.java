@@ -33,16 +33,13 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter{
     String tokenRequest = request.getHeader(HttpHeaders.AUTHORIZATION);
 
     if (tokenRequest != null) {
-      System.out.println("entro al filtro");
       tokenRequest = tokenRequest.substring(7);
-      System.out.println("el token es"+tokenRequest);
 
       DecodedJWT decodedJWT = jwtUtil.validateJWT(tokenRequest);
 
       String username = jwtUtil.extractUsername(decodedJWT);
 
       String authoritiesString = jwtUtil.getSpecificClaim(decodedJWT, "authorities").asString();
-      System.out.println("22");
       Collection<? extends GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesString);
 
       SecurityContext context = SecurityContextHolder.getContext();
@@ -50,7 +47,6 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter{
 
       context.setAuthentication(authentication);
       SecurityContextHolder.setContext(context);
-      System.out.println("33");
     }
     filterChain.doFilter(request, response);
     
