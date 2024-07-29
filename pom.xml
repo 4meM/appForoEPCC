@@ -28,6 +28,12 @@
 	</scm>
 	<properties>
 		<java.version>22</java.version>
+		<maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <sonar.projectKey>ForoTest1</sonar.projectKey>
+        <sonar.projectName>ForoTest1</sonar.projectName>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.coverage.exclusions>src/**/domain/*, src/**/ProyectoForoApplication.java</sonar.coverage.exclusions>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -117,6 +123,13 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<!-- https://mvnrepository.com/artifact/org.sonarsource.scanner.maven/sonar-maven-plugin -->
+			<plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+            <version>4.0.0.4121</version>
+      </plugin>
+
 		</plugins>
 	</build>
 

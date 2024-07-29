@@ -72,10 +72,10 @@ public class PostService implements IPostService{
                 .startAndWait();
       return true;
     } catch (InterruptedException ie) {
-      System.out.println(ie.getMessage());
+      Thread.currentThread().interrupt();
       return false;
     }
-  };
+  }
 
   @Override
   public List<Post> searchWord(String query) {

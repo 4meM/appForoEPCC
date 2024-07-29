@@ -1,6 +1,5 @@
 package com.app.services.implementations;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.domain.post.Answer;
@@ -8,6 +7,7 @@ import com.app.domain.post.Comment;
 import com.app.domain.post.Entry;
 import com.app.domain.post.Post;
 import com.app.domain.user.ForoUser;
+import com.app.exceptions.CreationException;
 import com.app.repositories.CommentRepositoryImp;
 import com.app.services.interfaces.ICommentService;
 
@@ -16,17 +16,18 @@ import com.app.services.interfaces.ICommentService;
 @Service
 public class CommentService implements ICommentService{
     
-  @Autowired
   private UserService userService;
-
-  @Autowired
   private PostService postService;
-  
-  @Autowired
   private AnswerService answerService;
-
-  @Autowired
   private CommentRepositoryImp commentRepository;
+
+  public CommentService (UserService userService, PostService postService, AnswerService answerService, CommentRepositoryImp commentRepository) {
+    this.userService = userService;
+    this.postService = postService;
+    this.answerService = answerService;
+    this.commentRepository = commentRepository;
+
+  }
 
 
   @Override
@@ -44,7 +45,7 @@ public class CommentService implements ICommentService{
 
           return commentRepository.save(comment);
       } catch (Exception e) {
-          throw new RuntimeException("No se pudo crear el comentario al post", e);
+          throw new CreationException("No se pudo crear el comentario al post");
       }
   }
 
@@ -63,7 +64,7 @@ public class CommentService implements ICommentService{
 
           return commentRepository.save(comment);
       } catch (Exception e) {
-          throw new RuntimeException("No se pudo crear el comentario al answer", e);
+          throw new CreationException("No se pudo crear el comentario al answer");
       }
   }
 

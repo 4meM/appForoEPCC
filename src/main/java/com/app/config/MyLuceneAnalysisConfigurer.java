@@ -4,60 +4,62 @@ import org.hibernate.search.backend.lucene.analysis.LuceneAnalysisConfigurationC
 import org.hibernate.search.backend.lucene.analysis.LuceneAnalysisConfigurer;
 
 public class MyLuceneAnalysisConfigurer implements LuceneAnalysisConfigurer {
+       private static final String STANDARD = "standard";
+       private static final String LOWERCASE = "lowercase";
+       private static final String SNOWBALL = "snowballPorter";
+       private static final String LANGUAGE = "language";
+       private static final String ASCIIFOLDING = "asciiFolding";
+
+
    @Override
   public void configure(LuceneAnalysisConfigurationContext context) {
     context.analyzer("english").custom()
-                    .tokenizer("standard")
-                    .tokenFilter("lowercase")
-                    .tokenFilter("snowballPorter").param("language", "English")
-                    .tokenFilter("asciiFolding");
-
-    // context.analyzer("name").custom()
-    //                 .tokenizer("standard")
-    //                 .tokenFilter("lowercase")
-    //                 .tokenFilter("asciiFolding");
+                    .tokenizer(STANDARD)
+                    .tokenFilter(LOWERCASE)
+                    .tokenFilter(SNOWBALL).param(LANGUAGE, "English")
+                    .tokenFilter(ASCIIFOLDING);
 
     // Analizador para texto en español
     context.analyzer("spanish").custom()
-           .tokenizer("standard")
-           .tokenFilter("lowercase")
+           .tokenizer(STANDARD)
+           .tokenFilter(LOWERCASE)
            .tokenFilter("stop")
               .param("words", "spanish.txt")
               .param("ignoreCase", "true")
            .tokenFilter("spanishLightStem")
-           .tokenFilter("asciiFolding");
+           .tokenFilter(ASCIIFOLDING);
 
     // Analizador para busqueda multilanguage
     context.analyzer("multilingual").custom()
-           .tokenizer("standard")
-           .tokenFilter("lowercase")
+           .tokenizer(STANDARD)
+           .tokenFilter(LOWERCASE)
            .tokenFilter("stop")
                .param("words", "spanish.txt") // Archivo con stop words en español e inglés
                .param("ignoreCase", "true")
-           .tokenFilter("snowballPorter")
-               .param("language", "Spanish")
-           .tokenFilter("snowballPorter")
-               .param("language", "English")
-           .tokenFilter("asciiFolding");
+           .tokenFilter(SNOWBALL)
+               .param(LANGUAGE, "Spanish")
+           .tokenFilter(SNOWBALL)
+               .param(LANGUAGE, "English")
+           .tokenFilter(ASCIIFOLDING);
 
     // analizador para nombres
     context.analyzer("name").custom()
-           .tokenizer("standard")
-           .tokenFilter("lowercase")
+           .tokenizer(STANDARD)
+           .tokenFilter(LOWERCASE)
            .tokenFilter("wordDelimiterGraph")
-           .tokenFilter("asciiFolding")
+           .tokenFilter(ASCIIFOLDING)
            .tokenFilter("stop")
            .tokenFilter("removeDuplicates");
 
     // analizador para busqueda exacta
     context.analyzer("exact").custom()
            .tokenizer("keyword")
-           .tokenFilter("lowercase")
-           .tokenFilter("asciiFolding");
+           .tokenFilter(LOWERCASE)
+           .tokenFilter(ASCIIFOLDING);
 
     context.normalizer("exact").custom()
-           .tokenFilter("lowercase")
-           .tokenFilter("asciiFolding");
+           .tokenFilter(LOWERCASE)
+           .tokenFilter(ASCIIFOLDING);
     
   }
 
