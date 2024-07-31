@@ -22,7 +22,8 @@ public class AuthController {
 
   private IUserService userService;
 
-  public AuthController(IUserService userService){
+
+  public AuthController(IUserService userService ){
     this.userService=userService;
   }
 

@@ -24,7 +24,6 @@ import com.app.domain.post.Post;
 import com.app.domain.user.ForoUser;
 import com.app.repositories.PostRepositoryImp;
 
-import jakarta.persistence.EntityManager;
 @ExtendWith(MockitoExtension.class)
 class PostServiceTest {
   
@@ -34,8 +33,6 @@ class PostServiceTest {
   private PostRepositoryImp postRepository;
   @Mock
   private UserService userService;
-  @Mock
-  private EntityManager entityManager;
 
   @InjectMocks
   private PostService postService;
@@ -45,6 +42,7 @@ class PostServiceTest {
 
   @Mock
   private SecurityContext securityContext;
+
 
    @BeforeEach
   public void setUp () {
@@ -81,6 +79,11 @@ class PostServiceTest {
   }
 
   @Test
+  void testCreatePost_NotFoundPost () {
+
+  }
+
+  @Test
   @Transactional
   void testGetPostById () {
     Long idPost = 1L;
@@ -95,6 +98,5 @@ class PostServiceTest {
     assertEquals(idPost, postFound.getId());
 
   }
-
 
 }

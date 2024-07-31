@@ -53,7 +53,7 @@ public class PostService implements IPostService{
       return postRepository.save(postCreated);
       
     } catch(Exception e){
-      throw new CreationException("No se pudo crear el post");
+      throw new CreationException("No se pudo crear el post"); 
     }
   }
 
@@ -67,7 +67,7 @@ public class PostService implements IPostService{
   @Override
   public boolean index() {
     try {
-      SearchSession searchSession = Search.session(entityManager);//crea un session para poder acceder los indices
+      SearchSession searchSession = Search.session(entityManager);
       searchSession.massIndexer()
                 .startAndWait();
       return true;

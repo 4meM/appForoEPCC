@@ -24,9 +24,9 @@ public class PostController {
 
   }
 
-  @PostMapping("/createPost")
+  @PostMapping("/create")
   public Post createPost(@RequestBody CreatePostFieldsDTO fields) {
-    return postService.createPost(fields.id(),fields.title(),fields.content());
+    return postService.createPost(fields.idUser(),fields.title(),fields.content());
   }
 
 }
