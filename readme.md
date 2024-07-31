@@ -1,8 +1,4 @@
-## Inicializacion de Base de datos POSTGRES en Docker
-
-    docker run -d --name foroEPCC -e POSTGRES_USER=maurpz -e POSTGRES_PASSWORD=12345 -e POSTGRES_DB=foro_db_v1 -p 5432:5432 postgres:latest
-### Estilos de programacio aplicados
-#### _1.- Error/Exception Handling_
+### _1.- Error/Exception Handling_
 Añadimos un manejador de errores global el cual se encargara de capturarlos.
 ```java
 @ControllerAdvice
@@ -20,8 +16,8 @@ public class GlobalExceptionHandler {
   }
 }
 ```
-#### Tipos de excepciones
-##### CreationException
+### Tipos de excepciones
+#### CreationException
 ```java
 public class CreationException extends RuntimeException{
   public CreationException (String message) {
@@ -29,7 +25,7 @@ public class CreationException extends RuntimeException{
   }
 }
 ```
-##### UnauthorizedException
+#### UnauthorizedException
 ```java
 public class UnauthorizedException extends RuntimeException{
   public UnauthorizedException (String message) {
@@ -38,8 +34,8 @@ public class UnauthorizedException extends RuntimeException{
 }
 
 ```
-#### 2.- Pipeline Style
-##### class JwlUtil ( obtener los roles del usuario )
+### 2.- Pipeline Style
+#### class JwlUtil ( obtener los roles del usuario )
 ```java
   public String generateToken (Authentication authentication){
     Algorithm algorithm = Algorithm.HMAC256(privateKey);
@@ -61,8 +57,8 @@ public class UnauthorizedException extends RuntimeException{
                       .sign(algorithm);
   }
 ```
-#### 3.-Persistent Tables Style
-##### Implementado para la tabla user
+### 3.-Persistent Tables Style
+#### Implementado para la tabla user
 ```java
 @Table(name = "users")
 public class ForoUser {
