@@ -1,3 +1,4 @@
+## Estilos de programacion usados
 ### _1.- Error/Exception Handling_
 Añadimos un manejador de errores global el cual se encargara de capturarlos.
 ```java
