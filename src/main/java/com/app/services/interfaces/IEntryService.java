@@ -1,12 +1,12 @@
-package com.proyect_v1.mvp.services.interfaces;
+package com.app.services.interfaces;
 
-import com.proyect_v1.mvp.domain.entities.Entry;
-import com.proyect_v1.mvp.domain.entities.User;
+import com.app.domain.post.Entry;
+import com.app.domain.user.ForoUser;
 
 public interface IEntryService {
 
-  public Entry createEntry(User user,String content);
+  public Entry createEntry(ForoUser user,String content);
 
-  public void addCommentToEntry(Long id_entry);
+  public void addCommentToEntry(Long idEntry);
   
 }

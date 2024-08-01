@@ -1,10 +1,20 @@
-package com.proyect_v1.mvp.services.interfaces;
+package com.app.services.interfaces;
 
-import com.proyect_v1.mvp.domain.entities.Post;
+import java.util.List;
+
+import com.app.controller.dto.response.PostDetailsDTO;
+import com.app.controller.dto.response.PostPreviewDTO;
+import com.app.domain.post.Post;
 
 public interface IPostService {
-  public Post createPost (Long id_user,String title,String content);
+  public Post createPost (Long idUser,String title,String content);
 
-  //public Post updatePost(Long id_post,Post modifiedPost);
+  public boolean index();
+
+  public List<Post> searchWord(String query);
+
+  public List<PostPreviewDTO> getUltimatePost ();
+  public PostDetailsDTO getDetailsPostById (Long idPost);
+
   
 }

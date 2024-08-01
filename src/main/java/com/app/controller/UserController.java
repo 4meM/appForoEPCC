@@ -1,34 +1,43 @@
-package com.app.controllers;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+package com.app.controller;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.domain.entities.Person;
-import com.app.domain.entities.User;
-import com.app.services.implementations.UserServiceImp;
+import com.app.domain.user.ForoUser;
+import com.app.services.interfaces.IUserService;
+
 
 @RestController
-@RequestMapping("/api/user")
+@CrossOrigin("http://localhost:3000/")
+@RequestMapping("/user")
 public class UserController {
-  @Autowired
-  private UserServiceImp userService;
 
+  private IUserService userService;
 
-  @CrossOrigin
-  @PostMapping("/create")
-  public ResponseEntity<User> createUser(@RequestBody Person person) {
-    try{
-      User newUser = userService.registerUser(person);
-      return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
-    } catch (Exception e){
-      throw new RuntimeException("No se pudo registrar el usuario");
-    }
+  public UserController (IUserService userService) {
+    this.userService = userService;
   }
 
+  @GetMapping("/role") 
+  @PreAuthorize("hasRole('ADMIN')")
+  public String onlyAdmins () {
+    return "Hi you has role ADMIN";
+  }
+
+  @GetMapping("/helloworld")
+  @PreAuthorize("permitAll()")
+  public String helloWorld () {
+    return "Hello world !";
+  }
+
+  @GetMapping("/check-status")
+  @PreAuthorize("hasRole('USER')")
+  public ForoUser checkStatus () {
+    String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+    return userService.getUserByUsername(username);
+  }
 }  

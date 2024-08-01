@@ -10,4 +10,6 @@ public class ProyectoForoApplication {
 		SpringApplication.run(ProyectoForoApplication.class, args);
 	}
 
+
+
 }
