@@ -13,7 +13,6 @@ import com.app.services.interfaces.IUserService;
 
 @RestController
 @CrossOrigin("http://localhost:3000/")
-@PreAuthorize("denyAll()")
 @RequestMapping("/user")
 public class UserController {
 
@@ -36,7 +35,7 @@ public class UserController {
   }
 
   @GetMapping("/check-status")
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasRole('USER')")
   public ForoUser checkStatus () {
     String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
     return userService.getUserByUsername(username);

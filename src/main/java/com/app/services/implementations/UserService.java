@@ -49,13 +49,14 @@ public class UserService implements IUserService{
     try {
       Person personCreated = personService.createPerson(fields.firstName(),fields.lastName(), fields.email(), fields.birthDay());
       Role userRole = Role.builder().name("USER").build();
-      Role adminRole = Role.builder().name("ADMIN").build();
+
+      String encodedPassword = passwordEncoder.encode(fields.password());
 
       ForoUser userCreated = ForoUser.builder()
                                      .username(fields.username())
-                                     .password(fields.password())
+                                     .password(encodedPassword)
                                      .person(personCreated) 
-                                     .roles(Set.of(userRole,adminRole))
+                                     .roles(Set.of(userRole))
                                      .build();
       return userRepository.save(userCreated);
     } catch(Exception e){

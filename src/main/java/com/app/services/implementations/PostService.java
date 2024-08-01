@@ -11,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.app.controller.dto.response.PostDetailsDTO;
+import com.app.controller.dto.response.PostPreviewDTO;
 import com.app.domain.post.Entry;
 import com.app.domain.post.Post;
 import com.app.domain.user.ForoUser;
@@ -57,10 +59,18 @@ public class PostService implements IPostService{
     }
   }
 
+  public List<PostPreviewDTO> getUltimatePost () {
+    return postRepository.findTop10ByOrderByEntryCreatedAt();
+  }
+
   @Transactional(readOnly = true)
   public Post getPostById(Long idPost){
     return postRepository.findById(idPost)
       .orElseThrow();
+  }
+
+  public PostDetailsDTO getDetailsPostById (Long idPost) {
+    return postRepository.findPostById(idPost);
   }
 
   //buscador

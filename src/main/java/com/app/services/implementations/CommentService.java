@@ -1,7 +1,10 @@
 package com.app.services.implementations;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.app.controller.dto.response.CommentDetailsDTO;
 import com.app.domain.post.Answer;
 import com.app.domain.post.Comment;
 import com.app.domain.post.Entry;
@@ -66,6 +69,11 @@ public class CommentService implements ICommentService{
       } catch (Exception e) {
           throw new CreationException("No se pudo crear el comentario al answer");
       }
+  }
+
+  public List<CommentDetailsDTO>getCommentsFromPost (Long idEntry) {
+    return commentRepository.findCommentByEntryId(idEntry);
+
   }
 
 

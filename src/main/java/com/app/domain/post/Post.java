@@ -49,5 +49,5 @@ public class Post {
 
   @Column(columnDefinition = "INT DEFAULT 0")
   private int answers;
-  
+   
 }

@@ -13,8 +13,6 @@ import com.app.services.interfaces.IAnswerService;
 
 @RestController
 @RequestMapping("/answer")
-@PreAuthorize("hasRole('ADMIN')")
-
 public class AnswerController {
   private IAnswerService answerService;
 
@@ -22,7 +20,7 @@ public class AnswerController {
     this.answerService = answerService;
 
   }
-
+  @PreAuthorize("hasRole('USER')")
   @PostMapping("/create")
   public Answer createAnswerForPost (@RequestBody CreateAnswerFieldsDTO fieldsDTO) {
     return answerService.createAnswer(fieldsDTO.postId(), fieldsDTO.content());

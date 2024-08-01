@@ -79,11 +79,6 @@ class PostServiceTest {
   }
 
   @Test
-  void testCreatePost_NotFoundPost () {
-
-  }
-
-  @Test
   @Transactional
   void testGetPostById () {
     Long idPost = 1L;

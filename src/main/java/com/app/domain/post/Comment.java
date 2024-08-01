@@ -1,6 +1,7 @@
 package com.app.domain.post;
 
 import com.app.domain.user.ForoUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,10 +31,12 @@ public class Comment {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "id_user", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_user_comment"), nullable = false)
   private ForoUser user;
 
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "id_entry_commented", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_entry_comment"), nullable = false)
   private Entry entry;
